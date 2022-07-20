@@ -4,16 +4,8 @@
     ],
     "cSpell.enabled": true,
     "cSpell.language": "en,de",
+    "cSpell.diagnosticLevel": "Hint",
     "latex-workshop.latex.recipes": [
-        {
-            "name": "lualatex->biber->lualatex x2",
-            "tools": [
-                "lualatex",
-                "biber",
-                "lualatex",
-                "lualatex"
-            ]
-        },
         {
             "name": "latexmk (lualatex)",
             "tools": [
@@ -25,13 +17,7 @@
             "tools": [
                 "latexmk"
             ]
-        },
-        {
-            "name": "pdflatex",
-            "tools": [
-                "pdflatex"
-            ]
-        },
+        }
     ],
     "latex-workshop.latex.tools": [
 
@@ -71,32 +57,9 @@
                 "-pdf",
                 "%DOC%"
             ]
-        },
-        {
-            "name": "pdflatex",
-            "command": "pdflatex",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "%DOC%"
-            ],
-            "env": {}
-        },
-        {
-            "name": "bibtex",
-            "command": "bibtex",
-            "args": [
-                "%DOCFILE%"
-            ],
-            "env": {}
-        },
-        {
-            "name": "biber",
-            "command": "biber",
-            "args": [
-                "%DOCFILE%"
-            ]
         }
-    ]
+    ],
+    "[latex]": {
+        "editor.wordWrap": "on"
+    }
 }
