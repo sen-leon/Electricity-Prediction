@@ -61,5 +61,6 @@
     ],
     "[latex]": {
         "editor.wordWrap": "on"
-    }
+    },
+    "jupyter.allowUnauthorizedRemoteConnection": true
 }
