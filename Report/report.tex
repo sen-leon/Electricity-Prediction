@@ -71,13 +71,6 @@ There is a variety of model architectures for this problem, including CNNs (Conv
 
 Description of the project. Images are always a plus. You should reference each figure in the text and explain what can be seen. The flow field in Figure~\ref{fig:flow} shows particle velocities. It is taken from~\cite{Author2020}. What is the problem? What is the goal? What is your idea?\\ 
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.9]{Figures/example_cover.png}
-	\caption{Flow field around a rectangular obstacle.}
-	\label{fig:flow}
-\end{figure}
-
 %\lipsum[2]
 
 You can include wrapped figures and tables, like Table~\ref{tab:features}. To make it work, there should be no newlines between the wrapped table or figure and the surrounding text. Normal tables work just as usual, like in Table~\ref{tab:other_parameters}.\\
@@ -130,7 +123,7 @@ The following data sets were used in this paper:
 \subsection{Feature Engineering}
 Raw data cannot necessarily be included directly as a feature in the model. Different pre-processing steps and a thoughtful selection of features can significantly imporove the final result. 
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[scale=0.9]{Figures/electrData.png}
 	\caption{Wind and solar energy production 2017-2021}
@@ -139,7 +132,7 @@ Raw data cannot necessarily be included directly as a feature in the model. Diff
 
 Figure~\ref{fig:electrData} shows the wind and solar energy production of 2017-2021. Seasonal and daily fluctuations can be observed. To further investigate this phenomenon, a fourier analysis, shown in figure \ref{fig:fourier} was performed.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
@@ -157,17 +150,55 @@ Figure~\ref{fig:electrData} shows the wind and solar energy production of 2017-2
 \label{fig:fourier}
 \end{figure}
 
-The fourier analysis reveals the frequencys that appear in the wind/solar energy production data. The solar energy production shows the highest peak at a frequency of 1/day, matching the daily elevation of the sun. For both, wind and solar energy the yearly and daily fluctuations are dominant.
-To consider these two frequencies, sine and cosine functions are used as a time representation.
+The fourier analysis reveals the frequencys that appear in the wind/solar energy production data. The solar energy production shows the highest peak at a frequency of 1/day, matching the daily elevation of the sun. For both, wind and solar energy the yearly and daily fluctuations are dominant.\\
+To account for these two frequencies, time is mapped to sine and cosine functions representing the periodicity of year and day (Figure~\ref{fig:timeSignal}). In addition, the solar elevation is determined, which, as expected, correlates strongly with solar energy production. The bottom plot in Figure~\ref{fig:timeSignal} shows the actual solar elevation by truncating the previous solar elevation curve to zero. In this way, the lack of sunlight during the night is represented.
 
-\begin{figure}[h]
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{Figures/timeSignal.png}
+	\caption{Periodic features}
+	\label{fig:timeSignal}
+\end{figure}
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{Figures/correlation.png}
 	\caption{Correlation analysis}
 	\label{fig:correlation}
 \end{figure}
 
+Figure~\ref{fig:correlation} shows the correlation between different variables. Darker colors implicate a higher (anti-)correlation. 
+
+
 \section{Methods and Model Architectures}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{Figures/modelEvolution.png}
+	\caption{Iterative model development}
+	\label{fig:modelEvo}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{Figures/SRNN.png}
+	\caption{Simple recurrent neural network (SRNN)}
+	\label{fig:SRNN}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{Figures/ARNN.png}
+	\caption{Autoregressive recurrent neural network (ARNN)}
+	\label{fig:ARNN}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{Figures/continousARNN.png}
+	\caption{Continous autoregressive recurrent neural network}
+	\label{fig:continousARNN}
+\end{figure}
+
 \section{Results and Optimization}
 \section{conclusion}
 \section{outlook}
