@@ -191,10 +191,18 @@ wind energy prod.  & day cosine               & windspeed            \\
 \label{tab:features}
 \end{table}
 
-
-
+Of 468 meteorological stations in Germany, only 117 provide reliable data (2017-2021). Of these remaining stations, 12 were selected for further representation of German weather. Decisive for the selection was the spatial proximity to offshore and solar installations as well as a broad distribution across Germany. The final weather stations are displayed on~\ref{fig:weatherStations}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{Figures/weatherStations.png}
+	\caption{Selected weathe3 stations in Germany}
+	\label{fig:weatherStations}
+\end{figure}
 
 \section{Methods and Model Architectures}
+
+The goal of this work is to predict solar and wind energy production 12 hours into the future. Current research offers a variety of machine learning models for this problem. Therefore, as a first step, different models were applied to the problem and evaluated regarding their prediction accuracy. Unpromising approaches were then discarded while succesful models were further explored and improved. 
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{Figures/modelEvolution.png}
@@ -224,8 +232,8 @@ wind energy prod.  & day cosine               & windspeed            \\
 \end{figure}
 
 \section{Results and Optimization}
-\section{conclusion}
-\section{outlook}
+\section{Conclusion}
+\section{Outlook}
 
 \subsection{The Navier-Stokes-Equations}
 
