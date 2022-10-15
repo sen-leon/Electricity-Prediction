@@ -69,7 +69,7 @@ The increase in the share of renewable energy sources in total energy production
 With this background, the goal of this work is to develop a machine learning model that predicts the renewable energy production 12 hours into the future.\\
 There is a variety of model architectures for this problem, including CNNs (Convolutional Neural Networks), RNNs (Recurrent Neural Networks), Autoencoders, GRUs (Gated Recurrent Units) or LSTMs (Long Short Term Memory). This paper will first explore and evaluate existing models regarding their accuracy, then iteratively develop an advanced and optimized model architecture.\\
 
-Description of the project. Images are always a plus. You should reference each figure in the text and explain what can be seen. The flow field in Figure~\ref{fig:flow} shows particle velocities. It is taken from~\cite{Author2020}. What is the problem? What is the goal? What is your idea?\\ 
+Description of the project. Images are always a plus. You should reference each figure in the text and explain what can be seen. The flow field shows particle velocities. It is taken from~\cite{Author2020}. What is the problem? What is the goal? What is your idea?\\ 
 
 %\lipsum[2]
 
@@ -121,7 +121,7 @@ The following data sets were used in this paper:
 \end{itemize}%
 
 \subsection{Feature Engineering}
-Raw data cannot necessarily be included directly as a feature in the model. Different pre-processing steps and a thoughtful selection of features can significantly imporove the final result. 
+Raw data cannot necessarily be included directly as a feature in the model. Different pre-processing steps and a thoughtful selection of features can significantly improve the final result. 
 
 \begin{figure}[h!]
 	\centering
@@ -151,7 +151,7 @@ Figure~\ref{fig:electrData} shows the wind and solar energy production of 2017-2
 \end{figure}
 
 The fourier analysis reveals the frequencys that appear in the wind/solar energy production data. The solar energy production shows the highest peak at a frequency of 1/day, matching the daily elevation of the sun. For both, wind and solar energy the yearly and daily fluctuations are dominant.\\
-To account for these two frequencies, time is mapped to sine and cosine functions representing the periodicity of year and day (Figure~\ref{fig:timeSignal}). In addition, the solar elevation is determined, which, as expected, correlates strongly with solar energy production. The bottom plot in Figure~\ref{fig:timeSignal} shows the actual solar elevation by truncating the previous solar elevation curve to zero. In this way, the lack of sunlight during the night is represented.
+To account for these two frequencies, time is mapped to sine and cosine functions representing the periodicity of year and day (Figure~\ref{fig:timeSignal}). In addition, the solar elevation is determined, which, as expected, correlates strongly with solar energy production. The bottom plot in Figure~\ref{fig:timeSignal} shows the actual solar elevation by truncating the previous solar elevation curve to zero. In this way, the lack of sunlight during night is represented.
 
 \begin{figure}[H]
 	\centering
@@ -160,6 +160,8 @@ To account for these two frequencies, time is mapped to sine and cosine function
 	\label{fig:timeSignal}
 \end{figure}
 
+The modified time features as well as air pressure, sunshine duration, temperature and wind speed were subjected to a correlation analysis. 
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{Figures/correlation.png}
@@ -167,7 +169,29 @@ To account for these two frequencies, time is mapped to sine and cosine function
 	\label{fig:correlation}
 \end{figure}
 
-Figure~\ref{fig:correlation} shows the correlation between different variables. Darker colors implicate a higher (anti-)correlation. 
+Figure~\ref{fig:correlation} shows the correlation matrix. Darker colors indicate a higher (anti-)correlation. The solar energy production is strongly correlated to the cosine of the day, sunshine duration, temperature and clipped solar elevation. In contrast, wind energy production is only strongly correlated with wind speed and slightly correlated with pressure and temperature, which can be explained by the ideal gas equation. Although the sine of day and year do not hold a high correlation, they were included in the feature vector for completeness.
+
+The final feature vector is a combination of two energy production features, six analytically determined time and solar elevation features, and 4 weather features (per weather station) as displayed in Table~\ref{tab:feature}.
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{p{4.5cm}|p{5cm}|p{4.5cm}}
+\toprule
+\textbf{Energy Production} & \textbf{Time and Solar Elevation} & \textbf{Weather}              \\
+\midrule
+solar energy prod. & day sine                 & temperature          \\
+wind energy prod.  & day cosine               & windspeed            \\
+                   & year sine                & pressure             \\
+                   & year cosine              & sunshine duration    \\
+                   & solar elevation          &                      \\
+                   & clipped solar elevation  &                     \\ \bottomrule
+\end{tabular}
+\end{center}
+\caption{Features}
+\label{tab:features}
+\end{table}
+
+
 
 
 \section{Methods and Model Architectures}
