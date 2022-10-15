@@ -195,13 +195,35 @@ Of 468 meteorological stations in Germany, only 117 provide reliable data (2017-
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{Figures/weatherStations.png}
-	\caption{Selected weathe3 stations in Germany}
+	\caption{Selected weather stations in Germany}
 	\label{fig:weatherStations}
 \end{figure}
 
 \section{Methods and Model Architectures}
 
-The goal of this work is to predict solar and wind energy production 12 hours into the future. Current research offers a variety of machine learning models for this problem. Therefore, as a first step, different models were applied to the problem and evaluated regarding their prediction accuracy. Unpromising approaches were then discarded while succesful models were further explored and improved. 
+The goal of this work is to predict solar and wind energy production 12 hours into the future. Current research offers a variety of machine learning models for this problem. Therefore, as a first step, different models were applied to the problem and evaluated regarding their prediction accuracy. Unpromising approaches were then discarded while succesful models were further explored and improved.
+
+The following models were investigated:
+
+\begin{itemize}
+\item \textbf{Repeat last Step:} This model only repeats the last given timestep, leading to a constant solar and wind energy production level in the future. As expected the model shows poor results. 
+\item \textbf{Repeat Yesterday:} Here the course of yesterday, starting at the same time, is repeated. 
+\item \textbf{Linear:} This architecture depicts a linear relation inducing a higher accuracy.
+\item \textbf{Dense Layer:} While the first three models did not use any machine learning techniques, this architecture uses 512 neurons in a dense layer. The result is an increase in the R$^2$ score up to 0.84.
+\item \textbf{CNN:} Convolutional Neural Network with 3x256 and 25x256
+\item \textbf{SRNN:} Simple Recurrent Neural Network with 32 units
+\item \textbf{GRU:} Gatet Recurrent Units with 32 units
+\item \textbf{LSTM 32:} Long Short Term Memory network with 32 units
+\item \textbf{LSTM 32$^2$:} Long Short Term Memory network with two layers each containing 32 units
+\end{itemize}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{Figures/benchmarks.png}
+	\caption{Iterative model development}
+	\label{fig:benchmarks}
+\end{figure} 
 
 \begin{figure}[H]
 	\centering
