@@ -225,7 +225,7 @@ The following models were investigated:
 	\label{fig:benchmarks}
 \end{figure} 
 
-Figure \ref{fig:benchmarks} shows the R$^2$ scores, that were reached by the different models. Since the models \" Repeat last Step\" and \" Repeat Yesterday\" only copy existing energy production values, their performance is very low (R$^2$>0.5). While the linear model still shows low accuracy, neural network approaches reached scores over 0.8. Recurrent neural networks perform better, since they are specialized for time series. GRUs and LSTMs are on par. Because GRUs are less complexly constructed, thus shorter training times, they were selected as a base for further model development.
+Figure \ref{fig:benchmarks} shows the R$^2$ scores, that were reached by the different models. Since the models \" Repeat last Step\" and \" Repeat Yesterday\" only copy existing energy production values, their performance is very low (R$^2$>0.5). While the linear model still shows low accuracy, neural network approaches reached scores over 0.8. Recurrent neural networks perform better, because they are specialized for time series. GRUs and LSTMs are on par. Since GRUs are less complex in structure and thus require shorter training times, they were selected as the basis for further model development.
 
 \begin{figure}[H]
 	\centering
@@ -240,7 +240,7 @@ Figure \ref{fig:benchmarks} shows the R$^2$ scores, that were reached by the dif
 	\caption{Simple recurrent neural network (SRNN)}
 	\label{fig:SRNN}
 \end{figure}
-Single-shot RNNs are the simplest recurrent neural networks. After the Warmup-phase, they predict a predefined number of future steps at once. Although they depict the temporal dependancies in time series, their structure does not allow to vary the prediction output length without retraining.
+Single-shot RNNs are the simplest recurrent neural networks. After the Warmup-phase, they predict a predefined number of future steps at once. Although they depict the temporal dependancies in time series, their structure does not allow to vary the length of the prediction output without retraining.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{Figures/ARNN.png}
@@ -249,9 +249,9 @@ Single-shot RNNs are the simplest recurrent neural networks. After the Warmup-ph
 \end{figure}
 Autoregressive neural networks work differently: After the Warmup-phase, the prediction of each unit is used as input for the next time step. This iterative architecture enables a flexible output length without retraining.\\
 
-One disadvantage of the given models is, that they do not take future information into account. For example, even though time and solar elevation are known for the future, they cannot be incorporated into the model due to their given architectures.
+One disadvantage of the given models is that they do not take into account future information. For example, even though time and solar elevation are known for the future, they cannot be included in the model due to their given architectures.
 
-Hence a new model architecture, an ARNN with continous input was designed. The idea was to not only include time and solar elevation features, but also weather forecasts in the future inputs. The model is built as following: During the Warmup-phase the recurrent units are fed with power, weather, and time data. Then, when the prediction starts, the recurrent units do not only pass the output of the last cell to the next, but additional future inputs including weather and time data are passed.
+Hence a new model architecture, an ARNN with continous input, was developed. The idea was to not only include time and solar elevation, but also weather forecasts in the future inputs. The model is structured as follows: During the Warmup-phase the recurrent units are fed with power, weather, and time data. Then, when the prediction starts, the recurrent units do not only pass the output of the last cell to the next, but also additional future inputs including weather and time data.
  
 \begin{figure}[H]
 	\centering
@@ -260,25 +260,67 @@ Hence a new model architecture, an ARNN with continous input was designed. The i
 	\label{fig:continousARNN}
 \end{figure}
 
-The continous ARNN was realized with both GRUs and LSTMs. Different numbers of layers and units were investigated. The so reached maximum R$^2$-score is 0.93. For better results the information density of the input data must be further improved. One possibility is to use more than 12 weather stations. To prohibit an overloaded feature vector, the idea is to increase the feature density. Hence, two approaches were tested: Feature comprimisation through a partial component analysis (PCA) and with an encoder.
+The continous ARNN was realized with both GRUs and LSTMs. Different numbers of layers and units were investigated. The maximum R$^2$-score obtained is 0.93. For better results, the information density of the input data must be further improved. One possibility is to use more than 12 weather stations. To prevent an overloaded feature vector, the idea is to increase the feature density. Therefore, two approaches were tested: Feature compression by a partial component analysis (PCA) and with an encoder.
 
 \textbf{Encoder:}
-In order to check the quality of comprimisation, in a first step an autoencoder was built, revealing whether the real weather data could be transformed beackwards out of the comprimised data. A comprimisation with 48 components showed adequate results.\\
+In order to check the quality of the compression, an autoencoder was created in a first step to show whether the real weather data can be transformed backwards from the compressed data. A compression with 48 components showed adequate results. ----- wehich accuracy????\\
 
 \textbf{PCA:}
-A linear PCA was used and the number of components reduced to eight.\\
+A linear PCA was used and the number of components was reduced to eight.\\
 
-Although the PCA is only able to depict linear relationships and includes eight features, its performance is on par with the more complex encoder. Therefore, it was used as the final model.
-
-
-\section{Results and Optimization}
-In order to further improve the prediction accuracy a hyperparameter optimization was performed. Due to tensorflow incompatibilities on the institutes server, the optimization was carried out on low level hardware. This issue restricted the number of possible optimization trials to 25. Optuna, an open source hyperparameter optimization framework was used to optimize the following three hyperparameters: 
+Although the PCA can only model linear relationships and includes eight features, its performance is comparable with that of the more complex encoder. Therefore, it was used as the final model:
 \begin{itemize}
-\item learning rate
-\item units per layer
-\item past input steps
+\item Deep autoregressive GRU with continous input
+\item 3 layers [32, 32, 32]
+\item Inputs (24 time steps):
+\begin{itemize}
+\item Solar and wind energy production (during past/warmup phase)
+\item 8 time and sun elevation features
+\item 8 PCA reduced weather features
+\end{itemize}
+\item Prediction of 12 time steps 
 \end{itemize}
 
+To further improve the prediction accuracy of the final model, hyperparameter optimization was performed. Due to Tensorflow incompatibilities on the institute server, the optimization was run on low-level hardware. This issue limited the number of possible optimization trials to 25. Optuna, an open source hyperparameter optimization framework was used to optimize the following three hyperparameters: 
+\begin{itemize}
+\item Learning rate
+\item Units per layer
+\item Past input steps
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{Figures/optimImportance.png}
+	\caption{Continous autoregressive recurrent neural network}
+	\label{fig:continousARNN}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{Figures/optimHistory.png}
+	\caption{Continous autoregressive recurrent neural network}
+	\label{fig:continousARNN}
+\end{figure}
+
+\section{Results}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{Figures/solarResults.png}
+  \label{fig:fourierWind}
+  \caption{Results of solar energy prediction}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{Figures/windResults.png}
+  \label{fig:fourierSolar}
+  \caption{Results of wind energy prediction}
+\end{subfigure}
+\caption{Solar and wind energy production with final model}
+\label{fig:fourier}
+\end{figure}
 
 \section{Conclusion}
 \section{Outlook}
