@@ -176,7 +176,7 @@ The final feature vector is a combination of 2 energy production features, 6 ana
 
 \begin{table}[H]
 \begin{center}
-\begin{tabular}{p{4.5cm}|p{5cm}|p{4.5cm}}
+\begin{tabular}{p{4.5cm} p{5cm} p{4.5cm}}
 \toprule
 \textbf{Energy Production} & \textbf{Time and Solar Elevation} & \textbf{Weather}              \\
 \midrule
@@ -222,18 +222,6 @@ The following models were investigated:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{Figures/benchmarks.png}
-	\caption{Iterative model development}
-	\label{fig:benchmarks}
-\end{figure} 
-
-Figure \ref{fig:benchmarks} shows the R$^2$ scores, that were reached by the different models. Since the models 
-``Repeat last Step'' and 
-``Repeat Yesterday''
-only copy existing energy production values, their performance is very low (R$^2$>0.5). While the linear model still shows low accuracy, neural network approaches reached scores over 0.8. Recurrent neural networks perform better, because they are specialized for time series. GRUs and LSTMs are on par. Since GRUs are less complex in structure and thus require shorter training times, they were selected as the basis for further model development.
-
-\begin{figure}[H]
-	\centering
 	\includegraphics[scale=1]{Figures/modelEvolution.png}
 	\caption{Iterative model development}
 	\label{fig:modelEvo}
@@ -252,11 +240,14 @@ Single-shot RNNs are the simplest recurrent neural networks. After the Warmup-ph
 	\caption{Autoregressive recurrent neural network (ARNN)}
 	\label{fig:ARNN}
 \end{figure}
-Autoregressive neural networks work differently: After the Warmup-phase, the prediction of each unit is used as input for the next time step. This iterative architecture enables a flexible output length without retraining.\\
+Autoregressive neural networks work differently: 
+After the Warmup-phase, the prediction of each unit is used as input for the next time step. 
+This iterative architecture enables a flexible output length without retraining.
 
 One disadvantage of the given models is that they do not take into account future information. For example, even though time and solar elevation are known for the future, they cannot be included in the model due to their given architectures.
-
-Hence a new model architecture, an ARNN with continous input, was developed. The idea was to not only include time and solar elevation, but also weather forecasts in the future inputs. The model is structured as follows: During the Warmup-phase the recurrent units are fed with power, weather, and time data. Then, when the prediction starts, the recurrent units do not only pass the output of the last cell to the next, but also additional future inputs including weather and time data.
+Hence a new model architecture, an ARNN with continous input, was developed. 
+The idea was to not only include time and solar elevation, but also weather forecasts in the future inputs. The model is structured as follows: 
+During the Warmup-phase the recurrent units are fed with power, weather, and time data. Then, when the prediction starts, the recurrent units do not only pass the output of the last cell to the next, but also additional future inputs including weather and time data.
  
 \begin{figure}[H]
 	\centering
@@ -283,6 +274,7 @@ Although the PCA can only model linear relationships and includes eight features
 \item Prediction of 12 time steps 
 \end{itemize}
 
+\subsection{Optimization}
 To further improve the prediction accuracy of the final model, hyperparameter optimization was performed. Due to Tensorflow incompatibilities on the institute server, the optimization was run on low-level hardware. This issue limited the number of possible optimization trials to 25. Optuna, an open source hyperparameter optimization framework was used to optimize the following three hyperparameters: 
 \begin{itemize}
 \item Learning rate
@@ -292,19 +284,32 @@ To further improve the prediction accuracy of the final model, hyperparameter op
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=1]{Figures/optimImportance.png}
+	\includegraphics[scale=0.8]{Figures/optimImportance.png}
 	\caption{Continous autoregressive recurrent neural network}
 	\label{fig:continousARNN}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=1]{Figures/optimHistory.png}
+	\includegraphics[scale=0.8]{Figures/optimHistory.png}
 	\caption{Continous autoregressive recurrent neural network}
 	\label{fig:continousARNN}
 \end{figure}
 
+\subsection{K-Fold-Cross-Validation}
+
 \section{Results}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{Figures/benchmarks.png}
+	\caption{Iterative model development}
+	\label{fig:benchmarks}
+\end{figure} 
+
+Figure \ref{fig:benchmarks} shows the R$^2$ scores, that were reached by the different models. Since the models 
+``Repeat last Step'' and 
+``Repeat Yesterday''
+only copy existing energy production values, their performance is very low (R$^2$>0.5). While the linear model still shows low accuracy, neural network approaches reached scores over 0.8. Recurrent neural networks perform better, because they are specialized for time series. GRUs and LSTMs are on par. Since GRUs are less complex in structure and thus require shorter training times, they were selected as the basis for further model development.
 
 \begin{figure}[H]
 \centering
@@ -323,6 +328,27 @@ To further improve the prediction accuracy of the final model, hyperparameter op
 \caption{Solar and wind energy production with final model}
 \label{fig:fourier}
 \end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Fold}   & \textbf{Val R²} & \textbf{Test R²} \\ \midrule
+\rowcolor[HTML]{FFFFFF} 
+1       & 0.9617 & 0.9315  \\
+\rowcolor[HTML]{FFFFFF} 
+2       & 0.9690 & 0.9574  \\
+\rowcolor[HTML]{FFFFFF} 
+3       & 0.9686 & 0.9607  \\
+\rowcolor[HTML]{FFFFFF} 
+4       & 0.9659 & 0.9558  \\
+\rowcolor[HTML]{FFFFFF} 
+5       & 0.9516 & 0.9444  \\ \midrule
+\textbf{Average} & \textbf{0.9633} & \textbf{0.9500} \\ \bottomrule
+\end{tabular}
+\caption{K-Fold cross validation}
+\label{tab:kfold}
+\end{table}
 
 \section{Conclusion}
 \section{Outlook}
