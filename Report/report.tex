@@ -201,7 +201,7 @@ Of 468 meteorological stations in Germany, only 117 provide reliable data (2017-
 
 \section{Methods and Model Architectures}
 
-The goal of this work is to predict solar and wind energy production 12 hours into the future. Current research offers a variety of machine learning models for this problem. Therefore, as a first step, different models were applied to the problem and evaluated regarding their prediction accuracy. Unpromising approaches were then discarded while succesful models were further explored and improved.
+The goal of this work is to predict solar and wind energy production 12 hours into the future. Current research offers a variety of machine learning models for this problem. Therefore, as a first step, different models were applied to the problem and evaluated regarding their prediction accuracy. Unpromising approaches were then discarded while succesful models were further explored and improved. The R$^2$ score was used as a measure of the accuracy of the prediction.
 
 The following models were investigated:
 
@@ -209,12 +209,12 @@ The following models were investigated:
 \item \textbf{Repeat last Step:} This model only repeats the last given timestep, leading to a constant solar and wind energy production level in the future. As expected the model shows poor results. 
 \item \textbf{Repeat Yesterday:} Here the course of yesterday, starting at the same time, is repeated. 
 \item \textbf{Linear:} This architecture depicts a linear relation inducing a higher accuracy.
-\item \textbf{Dense Layer:} While the first three models did not use any machine learning techniques, this architecture uses 512 neurons in a dense layer. The result is an increase in the R$^2$ score up to 0.84.
+\item \textbf{Dense Layer:} While the first three models did not use any machine learning techniques, this architecture uses 512 neurons in a dense layer. 
 \item \textbf{CNN:} Convolutional Neural Network with 3x256 and 25x256
-\item \textbf{SRNN:} Simple Recurrent Neural Network with 32 units
-\item \textbf{GRU:} Gatet Recurrent Units with 32 units
-\item \textbf{LSTM 32:} Long Short Term Memory network with 32 units
-\item \textbf{LSTM 32$^2$:} Long Short Term Memory network with two layers each containing 32 units
+\item \textbf{SRNN:} Simple Recurrent Neural Network with 32 units. RNNs are specialized for time series.
+\item \textbf{GRU:} Gated Recurrent Units with 32 units, an improved version of RNNs. 
+\item \textbf{LSTM 32:} Long Short Term Memory network with 32 units, advanced version of RNNs.
+\item \textbf{LSTM 32$^2$:} Long Short Term Memory network with two layers each containing 32 units.
 \end{itemize}
 
 
@@ -224,6 +224,8 @@ The following models were investigated:
 	\caption{Iterative model development}
 	\label{fig:benchmarks}
 \end{figure} 
+
+Figure \ref{fig:benchmarks} shows the R$^2$ scores, that were reached by the different models. Since the models \" Repeat last Step\" and \" Repeat Yesterday\" only copy existing energy production values, their performance is very low (R$^2$>0.5). While the linear model still shows low accuracy, neural network approaches reached scores over 0.8. Recurrent neural networks perform better, since they are specialized for time series. GRUs and LSTMs are on par. Because GRUs are less complexly constructed, thus shorter training times, they were selected as a base for further model development.
 
 \begin{figure}[H]
 	\centering
@@ -238,14 +240,19 @@ The following models were investigated:
 	\caption{Simple recurrent neural network (SRNN)}
 	\label{fig:SRNN}
 \end{figure}
-
+Single-shot RNNs are the simplest recurrent neural networks. After the Warmup-phase, they predict a predefined number of future steps at once. Although they depict the temporal dependancies in time series, their structure does not allow to vary the prediction output length without retraining.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{Figures/ARNN.png}
 	\caption{Autoregressive recurrent neural network (ARNN)}
 	\label{fig:ARNN}
 \end{figure}
+Autoregressive neural networks work differently: After the Warmup-phase, the prediction of each unit is used as input for the next time step. This iterative architecture enables a flexible output length without retraining.\\
 
+One disadvantage of the given models is, that they do not take future information into account. For example, even though time and solar elevation are known for the future, they cannot be incorporated into the model due to their given architectures.
+
+Hence a new model architecture, an ARNN with continous input was designed. The idea was to not only include time and solar elevation features, but also weather forecasts in the future inputs. The model is built as following: During the Warmup-phase the recurrent units are fed with power, weather, and time data. Then, when the prediction starts, the recurrent units do not only pass the output of the last cell to the next, but additional future inputs including weather and time data are passed.
+ 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{Figures/continousARNN.png}
@@ -253,7 +260,26 @@ The following models were investigated:
 	\label{fig:continousARNN}
 \end{figure}
 
+The continous ARNN was realized with both GRUs and LSTMs. Different numbers of layers and units were investigated. The so reached maximum R$^2$-score is 0.93. For better results the information density of the input data must be further improved. One possibility is to use more than 12 weather stations. To prohibit an overloaded feature vector, the idea is to increase the feature density. Hence, two approaches were tested: Feature comprimisation through a partial component analysis (PCA) and with an encoder.
+
+\textbf{Encoder:}
+In order to check the quality of comprimisation, in a first step an autoencoder was built, revealing whether the real weather data could be transformed beackwards out of the comprimised data. A comprimisation with 48 components showed adequate results.\\
+
+\textbf{PCA:}
+A linear PCA was used and the number of components reduced to eight.\\
+
+Although the PCA is only able to depict linear relationships and includes eight features, its performance is on par with the more complex encoder. Therefore, it was used as the final model.
+
+
 \section{Results and Optimization}
+In order to further improve the prediction accuracy a hyperparameter optimization was performed. Due to tensorflow incompatibilities on the institutes server, the optimization was carried out on low level hardware. This issue restricted the number of possible optimization trials to 25. Optuna, an open source hyperparameter optimization framework was used to optimize the following three hyperparameters: 
+\begin{itemize}
+\item learning rate
+\item units per layer
+\item past input steps
+\end{itemize}
+
+
 \section{Conclusion}
 \section{Outlook}
 
