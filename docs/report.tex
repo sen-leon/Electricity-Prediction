@@ -55,7 +55,7 @@ long = rectified linear unit}
 	\vspace{0.1\textheight}
 	
 	%%% Your names, if long, a "\\" in between may help to make things look better
-	{\Large \textsc{Luis Gentner, Leon Sengün, Dilara Yildiz}} 
+    {\Large \textsc{Luis Gentner, Leon Sengün, Dilara Yildiz}} 
 	
 	\vfill 
 	
@@ -360,22 +360,53 @@ To ensure that the test and validation data sets were representative for the who
 The main idea of this work is to predict the solar and wind energy production 12 hours into the future. Therefore different models and architectures were introduced (\autoref{methods}). In this chapter, the results of these models are presented allowing them to be compared and evaluated. 
 %The first part deals with the outcomes of the different models that have been tested. The second discusses the results of the various architectures of \acp{RNN}, particularly the self-developed architecture, the continuous \ac{ARRNN}.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=0.6]{scoresBenchmarks.png}
-	\caption{$R^2$ scores of benchmark and single-shot prediction networks}
-	\label{fig:benchmarks}
-\end{figure} 
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[scale=0.6]{scoresBenchmarks.png}
+% 	\caption{$R^2$ scores of benchmark and single-shot prediction networks}
+% 	\label{fig:benchmarks}
+% \end{figure} 
 
 \autoref{fig:benchmarks} shows the $R^2$ scores, that were reached by the different models. Since the models \textit{Repeat last step} and \textit{Repeat yesterday} only repeat the the energy production input, their performance is very low ($R^2 < 0.5$). While the \textit{Linear} model still shows low accuracy, deep neural network approaches reach scores over 0.8. Recurrent neural networks perform better, because their structure is specialized for time series. The advanced types of recurrent units, \acp{GRU} and \acp{LSTM}, provide the most accurate results and were therefore used for further model development.
 
 As the performance of single-shot \acp{RNN} is limited, more complex network architectures, \acp{ARRNN}, were investigated.
-\begin{figure}[h!]
+
+% \begin{figure}[h!]
+% \begin{subfigure}{0.5\textwidth}
+%     \centering
+% 	\includegraphics[scale=0.6]{scoresBenchmarks.png}
+% 	\caption{$R^2$ scores of benchmark and single-shot prediction networks}
+% 	\label{fig:benchmarks}
+% \end{subfigure}
+
+% \begin{subfigure}{0.5\textwidth}
+% 	\centering
+% 	\includegraphics[scale=0.6]{figures/arnnCompare.png}
+% 	\caption{$R^2$ scores of different \ac{ARRNN} architectures}
+% 	\label{fig:arnnBenchmarks}
+% \end{subfigure}
+% \end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}{.5\textwidth}
+    \centering
+	\includegraphics[scale=1.0]{scoresBenchmarks.png} \vspace*{0.5cm}
+	\caption{Benchmark and single-shot prediction networks}
+	\label{fig:benchmarks}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
 	\centering
-	\includegraphics[scale=0.6]{figures/arnnCompare.png}
-	\caption{$R^2$ scores of different \ac{ARRNN} architectures}
+	\includegraphics[scale=1.0]{figures/arnnCompare.png}
+	\caption{Different \ac{ARRNN} architectures}
 	\label{fig:arnnBenchmarks}
+\end{subfigure}
+\caption{$R^2$ scores of Benchmarks, single-shot prediction networks and \acp{ARRNN}}
+\label{fig:ResultBarChart}
 \end{figure}
+
+
 
 \autoref{fig:arnnBenchmarks} shows the $R^2$ scores of the various autoregressive networks. The number behind the model name indicates the number of layers as well as the number of units per layer. 
 \enquote{+ wx} marks the models where weather data was included in form of a continuous \ac{ARRNN}. 
@@ -404,7 +435,7 @@ A further improvement in accuracy was achieved with the encoder and \ac{PCA} rea
 \end{figure}
 
 \autoref{fig:Results} displays the prediction of solar and wind energy production in randomly selected time frames using the final model. The solar energy predictions are close to the labels with only minor deviations, whereas the wind energy prediction has larger discrepancies from ground truth. The reason can be seen in the correlation analysis (\autoref{fig:correlation}) - while solar energy production is highly correlated with more than three of the given features, wind energy only shows a strong correlation to wind speed. Accordingly, the prediction of wind energy based on these features is also lower.
-
+\newpage
 \section{Conclusion}
 The goal of this paper was to predict solar and wind energy production 12 hours into the future. Therefore a variety of existing machine learning approaches were investigated and new model architectures were developed. 
 %What has been learned from the project is that using \acp{RNN} for this kind of task is favourable because they are best suited for modeling time-series data, and because they offer the ability to be made autoregressive. 
@@ -424,7 +455,7 @@ Moreover, by using a \ac{CNN} autoencoder or a graph neural network could help c
 Statistical methods, like Bayesian structural time series \cite{scott_predicting_2014,TFProb_Structural_Timeseries} could be employed as a comparison to the neural network approach.
 
 %% to predict further inputs, such as power consumption, or gas price, which could be used to broaden the scope to include electricity price prediction.
-
+% \newpage
 \printbibliography
 
 \end{document}
