@@ -9,22 +9,23 @@
 \else
 \usepackage{fontspec}
 \fi
-
-\usepackage[ngerman, english]{babel} 
-\usepackage{csquotes}
-\usepackage{microtype}
-
+\usepackage[english]{babel}
 \usepackage{lipsum}
-
+\usepackage{microtype}
 \usepackage{float}
 \usepackage{caption}
 
-\usepackage{subfigure}
+
+\usepackage{subcaption}
+\usepackage[skip=50pt]{caption} % default 10pt
+\captionsetup[figure]{skip=10pt}
 \usepackage{rotating}
 \usepackage{wrapfig}
 
 \usepackage{graphicx}
-\graphicspath{{figures/}}
+\graphicspath{
+  {figures/}
+}  
 
 \captionsetup{format=plain,
 	aboveskip=-0.2cm,
@@ -46,11 +47,17 @@
 \usepackage{geometry}  % Used to adjust the document margins
 \usepackage{amsmath}   % math symbols
 \usepackage{amssymb}   % more math symbols
-\usepackage{textcomp}  % defines textquotesingle
-
+\usepackage{siunitx}   % write numbers and units nicely
+% \usepackage{textcomp}  % defines textquotesingle
+\usepackage[           % Literaturverwaltung mit BibLaTeX
+  style=ieee,
+  sorting=none
+]{biblatex}                     
+\addbibresource{bibliography.bib} % Pfad Literaturverzeichnis
+\usepackage[autostyle=true]{csquotes} % Für BibLaTeX notwendig
 \usepackage{upquote}   % Upright quotes for verbatim code
 \usepackage{eurosym}   % defines \euro
-\usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+% \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
 \usepackage{fancyvrb}  % verbatim replacement that allows latex
 \usepackage{grffile}   % extends the file name processing of package graphics 
 % to support a larger range
@@ -65,8 +72,7 @@
 \usepackage{hyperref}
 \usepackage[capitalise]{cleveref}
 \Crefname{figure}{Fig.}{Figs.}% {<type>}{<singular>}{<plural>}
-
-
+\usepackage{acro}
 
 % The default LaTeX title has an obnoxious amount of whitespace. By default,
 % titling removes some of it. It also provides customization options.
@@ -89,8 +95,8 @@
 \definecolor{citecolor}{rgb}{0,0,0}%{.12,.54,.11}
 
 
-\title{Machine Learning Methods in Mechanics Report SS21}
-\author{Students}
+\title{Predicting Renewable Energy Production Using Machine Learning Methods}
+\author{Luis Gentner, Leon Sengün, Dilara Yildiz}
 \date{\today}
 
 
@@ -120,5 +126,5 @@
 \pagestyle{fancy} %plain} % use fancy for all pages except chapter start
 \fancyhead[L]{\leftmark}
 %\lhead{\includegraphics[height=1.3cm]{logo2}} % left logo
-\rhead{\includegraphics[height=0.6cm]{Figures/header.png}}   % right logo
+\rhead{\includegraphics[height=0.6cm]{header.png}}   % right logo
 %\renewcommand{\headrulewidth}{0pt} % remove rule below header

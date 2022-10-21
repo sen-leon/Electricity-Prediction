@@ -1,0 +1,87 @@
+%% Creator: Inkscape 1.2 (dc2aedaf03, 2022-05-15), www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'autoenc.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{230.40000343bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,1)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{autoenc.pdf}}%
+    \put(0.30761719,0.78678386){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$\textit{WX}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{autoenc.pdf}}%
+    \put(0.30761719,0.28222657){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$\textit{WX}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{autoenc.pdf}}%
+    \put(0.56803385,0.15852865){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$E$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{autoenc.pdf}}%
+    \put(0.68847656,0.28222657){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Predictions\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{autoenc.pdf}}%
+    \put(0.75358072,0.53287761){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ARRNN\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{autoenc.pdf}}%
+    \put(0.68847656,0.15852865){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Labels\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{autoenc.pdf}}%
+    \put(0.68847656,0.82584636){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Inputs\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{autoenc.pdf}}%
+    \put(0.30761719,0.20084636){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$t=i$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{autoenc.pdf}}%
+    \put(0.56803385,0.07714844){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$t=i+1$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{autoenc.pdf}}%
+    \put(0.56803385,0.28222657){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$E$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{autoenc.pdf}}%
+    \put(0.56803385,0.78678386){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$T$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=12]{autoenc.pdf}}%
+    \put(0.56803385,0.86816406){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$E$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=13]{autoenc.pdf}}%
+    \put(0.30761719,0.86816406){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$t=i$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=14]{autoenc.pdf}}%
+    \put(0.18717448,0.53287761){\color[rgb]{0,0,0}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}AE\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=15]{autoenc.pdf}}%
+    \put(0.56803385,0.94954427){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$t=i$\end{tabular}}}}%
+  \end{picture}%
+\endgroup%
