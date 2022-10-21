@@ -124,21 +124,19 @@ Future solar and wind energy generation depends not only on past energy generati
 The following data sets were used in this paper:
 
 \begin{itemize}
-  \item Electricity data (2017-2021) obtained from Energy-Charts (from Fraunhofer ISE), hourly resolution.
-  \item Weather data (2017-2021) from DWD (Deutscher Wetterdienst) including 4 parameters from 117 meteorological station in Germany (resultin in 468 total measurements), hourly resolution.
+  \item Electricity data (2017-2021) obtained from Energy-Charts (from Fraunhofer ISE), hourly resolution
+  \item Weather data (2017-2021) from DWD (Deutscher Wetterdienst) including 468 meteorological stations in Germany, hourly resolution
 \end{itemize}%
 
 \subsection{Feature Engineering}
-Raw data cannot necessarily be included directly as a feature in the model. Different pre-processing steps and a thoughtful selection of features can significantly improve the final result. 
-
-\begin{figure}[h!]
+Raw data cannot necessarily be included directly as a feature in the model. Different pre-processing steps and a thoughtful selection of features can significantly improve the prediction. 
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.9]{Figures/electrData.png}
 	\caption{Wind and solar energy production 2017-2021}
 	\label{fig:electrData}
 \end{figure}
-
-\autoref{fig:electrData} shows the wind and solar energy production of 2017-2021. Seasonal and daily fluctuations can be observed. To further investigate this phenomenon, a fourier analysis, shown in figure \ref{fig:fourier} was performed.
+Figure~\ref{fig:electrData} shows the wind and solar energy production of 2017-2021. Seasonal and daily fluctuations can be observed. These are further investigated with a fourier analysis, illustrated in figure~\ref{fig:fourier}.
 
 \begin{figure}[H]
 \centering
@@ -158,8 +156,13 @@ Raw data cannot necessarily be included directly as a feature in the model. Diff
 \label{fig:fourier}
 \end{figure}
 
-The fourier analysis reveals the frequencies that appear in the wind/solar energy production data. The solar energy production shows the highest peak at a frequency of 1/day, matching the daily elevation of the sun. For both, wind and solar energy the yearly and daily fluctuations are dominant.\\
-To account for these two frequencies, time is mapped to sine and cosine functions representing the periodicity of year and day (Figure~\ref{fig:timeSignal}). In addition, the solar elevation is determined, which, as expected, correlates strongly with solar energy production. The bottom plot in Figure~\ref{fig:timeSignal} shows the actual solar elevation by truncating the previous solar elevation curve to zero. In this way, the lack of sunlight during night is represented.
+The fourier analysis reveals, which frequencys appear in the given data. The solar energy production shows the highest peak at a frequency of 1/day, matching the daily elevation of the sun. For both, wind and solar energy the yearly (1/year) and daily (1/day) fluctuations are dominant.\\
+To account for these two frequencies, time is mapped to sine and cosine functions representing the periodicity of year and day 
+(Figure~\ref{fig:timeSignal}). 
+In addition, the solar elevation is determined, which, as expected, correlates strongly with solar energy production. 
+By truncating this solar elevation curve to zero, 
+the lack of sunlight during night is represented
+($=$\verb|solar_el_clip|).
 
 \begin{figure}[H]
 	\centering
@@ -169,21 +172,19 @@ To account for these two frequencies, time is mapped to sine and cosine function
 \end{figure}
 
 The modified time features as well as air pressure, sunshine duration, temperature and wind speed were subjected to a correlation analysis. 
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{Figures/correlation.png}
 	\caption{Correlation analysis}
 	\label{fig:correlation}
 \end{figure}
+Figure~\ref{fig:correlation} shows the correlation matrix. Darker colors indicate a higher (anti-)correlation. The solar energy production is strongly correlated to the cosine of the day, sunshine duration, temperature and clipped solar elevation. In contrast, wind energy production is only strongly correlated with wind speed and slightly correlated with pressure and temperature, which can be explained by the ideal gas equation. Although the sine of day and year do not hold a high correlation, they were included in the feature vector for completeness.\\
 
-Figure~\ref{fig:correlation} shows the correlation matrix. Darker colors indicate a higher (anti-)correlation. The solar energy production is strongly correlated to the cosine of the day, sunshine duration, temperature and clipped solar elevation. In contrast, wind energy production is only strongly correlated with wind speed and slightly correlated with pressure and temperature, which can be explained by the ideal gas equation. Although the sine of day and year do not hold a high correlation, they were included in the feature vector for completeness.
+The final feature vector is a combination of 2 energy production features, 6 analytically determined time and solar elevation features, and 4 weather features (per weather station) as displayed in Table~\ref{tab:features}.
 
-The final feature vector is a combination of two energy production features, six analytically determined time and solar elevation features, and 4 weather features (per weather station) as displayed in Table~\ref{tab:feature}.
-
-\begin{table}[]
+\begin{table}[H]
 \begin{center}
-\begin{tabular}{p{4.5cm}|p{5cm}|p{4.5cm}}
+\begin{tabular}{p{4.5cm} p{5cm} p{4.5cm}}
 \toprule
 \textbf{Energy Production} & \textbf{Time and Solar Elevation} & \textbf{Weather}              \\
 \midrule
@@ -199,7 +200,7 @@ wind energy prod.  & day cosine               & windspeed            \\
 \label{tab:features}
 \end{table}
 
-Of 468 meteorological stations in Germany, only 117 provide reliable data (2017-2021). Of these remaining stations, 12 were selected for further representation of German weather. Decisive for the selection was the spatial proximity to offshore and solar installations as well as a broad distribution across Germany. The final weather stations are displayed on~\ref{fig:weatherStations}
+Out of 468 meteorological stations in Germany, only 117 provide reliable data for the years 2017-2021. Of these remaining stations, 12 were selected for further representation of German weather. Decisive for the selection was the spatial proximity to offshore and solar installations as well as a broad distribution across Germany. The final weather stations are illustrated in figure~\ref{fig:weatherStations}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{Figures/weatherStations.png}
@@ -209,29 +210,23 @@ Of 468 meteorological stations in Germany, only 117 provide reliable data (2017-
 
 \section{Methods and Model Architectures}
 
-The goal of this work is to predict solar and wind energy production 12 hours into the future. Current research offers a variety of machine learning models for this problem. Therefore, as a first step, different models were applied to the problem and evaluated regarding their prediction accuracy. Unpromising approaches were then discarded while succesful models were further explored and improved.
+The goal of this work is to predict solar and wind energy production 12 hours into the future. Current research offers a variety of machine learning models for this problem. Therefore, as a first step, different models were applied to the problem and evaluated regarding their prediction accuracy. Unpromising approaches were then discarded while succesful models were further explored and improved. The R$^2$ score was used as a measure of the accuracy of the prediction.
 
 The following models were investigated:
 
 \begin{itemize}
-\item \textbf{Repeat last Step:} This model only repeats the last given timestep, leading to a constant solar and wind energy production level in the future. As expected the model shows poor results. 
+\item \textbf{Repeat last Step:} This model only repeats the last given timestep, leading to a constant solar and wind energy production level in the future. 
+%As expected the model shows poor results. 
 \item \textbf{Repeat Yesterday:} Here the course of yesterday, starting at the same time, is repeated. 
 \item \textbf{Linear:} This architecture depicts a linear relation inducing a higher accuracy.
-\item \textbf{Dense Layer:} While the first three models did not use any machine learning techniques, this architecture uses 512 neurons in a dense layer. The result is an increase in the R$^2$ score up to 0.84.
+\item \textbf{Dense Layer:} While the first three models did not use any machine learning techniques, this architecture uses 512 neurons in a dense layer. 
 \item \textbf{CNN:} Convolutional Neural Network with 3x256 and 25x256
-\item \textbf{SRNN:} Simple Recurrent Neural Network with 32 units
-\item \textbf{GRU:} Gated Recurrent Units with 32 units
-\item \textbf{LSTM 32:} Long Short Term Memory network with 32 units
-\item \textbf{LSTM 32$^2$:} Long Short Term Memory network with two layers each containing 32 units
+\item \textbf{SRNN:} Simple Recurrent Neural Network with 32 units. RNNs are specialized for time series.
+\item \textbf{GRU:} Gated Recurrent Units with 32 units, an improved version of RNNs. 
+\item \textbf{LSTM 32:} Long Short Term Memory network with 32 units, advanced version of RNNs.
+\item \textbf{LSTM 32$^2$:} Long Short Term Memory network with two layers each containing 32 units.
 \end{itemize}
 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{Figures/benchmarks.png}
-	\caption{Iterative model development}
-	\label{fig:benchmarks}
-\end{figure} 
 
 \begin{figure}[H]
 	\centering
@@ -246,14 +241,22 @@ The following models were investigated:
 	\caption{Simple recurrent neural network (SRNN)}
 	\label{fig:SRNN}
 \end{figure}
-
+Single-shot RNNs are the simplest recurrent neural networks. After the Warmup-phase, they predict a predefined number of future steps at once. Although they depict the temporal dependancies in time series, their structure does not allow to vary the length of the prediction output without retraining.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{Figures/ARNN.png}
 	\caption{Autoregressive recurrent neural network (ARNN)}
 	\label{fig:ARNN}
 \end{figure}
+Autoregressive neural networks work differently: 
+After the Warmup-phase, the prediction of each unit is used as input for the next time step. 
+This iterative architecture enables a flexible output length without retraining.
 
+One disadvantage of the given models is that they do not take into account future information. For example, even though time and solar elevation are known for the future, they cannot be included in the model due to their given architectures.
+Hence a new model architecture, an ARNN with continous input, was developed. 
+The idea was to not only include time and solar elevation, but also weather forecasts in the future inputs. The model is structured as follows: 
+During the Warmup-phase the recurrent units are fed with power, weather, and time data. Then, when the prediction starts, the recurrent units do not only pass the output of the last cell to the next, but also additional future inputs including weather and time data.
+ 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{Figures/continousARNN.png}
@@ -261,52 +264,118 @@ The following models were investigated:
 	\label{fig:continousARNN}
 \end{figure}
 
-\section{Results and Optimization}
-\section{Conclusion}
-\section{Outlook}
+The continous ARNN was realized with both GRUs and LSTMs. Different numbers of layers and units were investigated. The maximum R$^2$-score obtained is 0.93. For better results, the information density of the input data must be further improved. One possibility is to use more than 12 weather stations. To prevent an overloaded feature vector, the idea is to increase the feature density. Therefore, two approaches were tested: Feature compression by a partial component analysis (PCA) and with an encoder.\\
+\textbf{Encoder:}
+In order to check the quality of the compression, an autoencoder was created in a first step to show whether the real weather data can be transformed backwards from the compressed data. A compression with 48 components showed adequate results. ----- wehich accuracy????\\
+\textbf{PCA:}
+A linear PCA was used and the number of components was reduced to eight.\\
+Although the PCA can only model linear relationships and includes eight features, its performance is on par with that of the more complex encoder. Therefore, it was used as the final model:
+\begin{itemize}
+\item Deep autoregressive GRU with continous input
+\item 3 layers [32, 32, 32]
+\item Inputs (24 time steps):
+\begin{itemize}
+\item Solar and wind energy production (during past/warmup phase)
+\item 8 time and sun elevation features
+\item 8 PCA reduced weather features
+\end{itemize}
+\item Prediction of 12 time steps 
+\end{itemize}
 
-\subsection{The Navier-Stokes-Equations}
+\subsection{Optimization}
+To further improve the prediction accuracy of the final model, hyperparameter optimization was performed. Due to Tensorflow incompatibilities on the institute server, the optimization was run on low-level hardware. This issue limited the number of possible optimization trials to 25. Optuna, an open source hyperparameter optimization framework was used to optimize the following three hyperparameters: 
+\begin{itemize}
+\item Learning rate
+\item Units per layer
+\item Past input steps
+\end{itemize}
 
-Equations as usual, like in Equation~\ref{equ:max_entropy}. Recall that equations like
-
-\begin{equation}\label{equ:max_entropy}
-	\phi_\mathrm{max} = \max_{\theta} \left[ \log(\sin(\theta - \exp(\theta))) - \theta^2 \right]
-\end{equation}
-
-are part of the text and should be treated like a word.
-
-%\lipsum[1]
-
-Or without numbering, like the realtivistic kinetic energy 
-
-\begin{equation*}
-	E = \frac{mc^2}{\sqrt{1 - \frac{v^2}{c^2}}},
-\end{equation*}
-
-which yields the Newtonian kinetic energy $E = \frac 1 2 m v^2$ when linearized for small velocities $v$.
-
-\subsection{Solution Method}
-%\lipsum[3-4]
-\begin{wrapfigure}{r}{0.55\textwidth}
+\begin{figure}[H]
 	\centering
-	\includegraphics[scale=1.0]{Figures/example_cover.png}
-	\caption{You can also use wrapped figures like this.}
-	\label{fig:wrapfigure_example}
-\end{wrapfigure}
-%\lipsum[5] \\ \newline
-Figure~\ref{fig:wrapfigure_example} shows how to include wrapped figures that text can float around. Depending on what is depicted and how large it is, it may look better than a full figure.
+	\includegraphics[scale=0.8]{Figures/optimImportance.png}
+	\caption{Continous autoregressive recurrent neural network}
+	\label{fig:continousARNN}
+\end{figure}
 
-\section{Convolutional Neural Networks}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{Figures/optimHistory.png}
+	\caption{Continous autoregressive recurrent neural network}
+	\label{fig:continousARNN}
+\end{figure}
 
-%\lipsum
-
-\section{Idea and Data Generation}
-
-%\lipsum
+\subsection{K-Fold-Cross-Validation}
 
 \section{Results}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{Figures/benchmarks.png}
+	\caption{Iterative model development}
+	\label{fig:benchmarks}
+\end{figure} 
 
-%\lipsum
+Figure \ref{fig:benchmarks} shows the R$^2$ scores, that were reached by the different models. Since the models 
+``Repeat last Step'' and 
+``Repeat Yesterday''
+only copy existing energy production values, their performance is very low (R$^2$>0.5). While the linear model still shows low accuracy, neural network approaches reached scores over 0.8. Recurrent neural networks perform better, because they are specialized for time series. GRUs and LSTMs are on par. Since GRUs are less complex in structure and thus require shorter training times, they were selected as the basis for further model development.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{Figures/solarResults.png}
+  \label{fig:fourierWind}
+  \caption{Results of solar energy prediction}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{Figures/windResults.png}
+  \label{fig:fourierSolar}
+  \caption{Results of wind energy prediction}
+\end{subfigure}
+\caption{Solar and wind energy production with final model}
+\label{fig:fourier}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Fold}   & \textbf{Val R²} & \textbf{Test R²} \\ \midrule
+\rowcolor[HTML]{FFFFFF} 
+1       & 0.9617 & 0.9315  \\
+\rowcolor[HTML]{FFFFFF} 
+2       & 0.9690 & 0.9574  \\
+\rowcolor[HTML]{FFFFFF} 
+3       & 0.9686 & 0.9607  \\
+\rowcolor[HTML]{FFFFFF} 
+4       & 0.9659 & 0.9558  \\
+\rowcolor[HTML]{FFFFFF} 
+5       & 0.9516 & 0.9444  \\ \midrule
+\textbf{Average} & \textbf{0.9633} & \textbf{0.9500} \\ \bottomrule
+\end{tabular}
+\caption{K-Fold cross validation}
+\label{tab:kfold}
+\end{table}
+
+\section{Conclusion}
+\section{Outlook}
+Account for weather forecast inaccuracy:
+Train with real forecast data
+Distort weather data: Random walk?
+CNN Auto-encoder: Detect spatial relationships
+Employ statistic methods
+e.g structural time series
+
+
+
+
+%\begin{wrapfigure}{r}{0.55\textwidth}
+%	\centering
+%	\includegraphics[scale=1.0]{Figures/example_cover.png}
+%	\caption{You can also use wrapped figures like this.}
+%	\label{fig:wrapfigure_example}
+%\end{wrapfigure}
 
 \begin{footnotesize}
 \bibliographystyle{acm}
